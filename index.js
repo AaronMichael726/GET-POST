@@ -20,7 +20,17 @@ app.get('/', (req, res) => {
 app.get('/dinosaurs', (req, res) => {
     let dinos = fs.readFileSync('./dinosaurs.json')
     dinos = JSON.parse(dinos)
-    console.log(dinos)
+    console.log(req.query.nameFilter)
+
+    let nameToFilterBy = req.query.nameFilter
+    // filter uses a for each loop - takes in param which is the function that exists within the for: each loop
+    const newFilteredArray = dinos.filter((dinosaurObj) => { 
+        if (dinosaurObj.name.toLowerCase() === nameToFilterBy.toLowerCase()) {return true}
+    })
+
+    if (nameToFilterBy) {dinos = newFilteredArray}
+
+    console.log(newFilteredArray)
     res.render('dinosaurs/index', {dinos: dinos}) // notices res.render points directly to "a" views folder
     //  you cannot have another folder name you must create a "views" dir
 })
